@@ -15,7 +15,7 @@ from utils.plots import plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized, TracedModel
 
 
-def detect(save_img=False, silent=True):
+def detect(save_img=False, silent=True, model=None):
     source, weights, view_img, save_txt, imgsz, trace = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size, not opt.no_trace
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
@@ -31,7 +31,7 @@ def detect(save_img=False, silent=True):
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
     # Load model
-    model = attempt_load(weights, map_location=device)  # load FP32 model
+    model = model if model is not None else attempt_load(weights, map_location=device)  # load FP32 model
     stride = int(model.stride.max())  # model stride
     imgsz = check_img_size(imgsz, s=stride)  # check img_size
 
